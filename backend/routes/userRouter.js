@@ -33,7 +33,8 @@ router.post("/signup", async (req, res) => {
     const { success } = signupSchema.safeParse(body);
     if (!success) {
       return res.status(400).json({
-        message: "Invalid input/ Username or Email already exists",
+        success: false,
+        message: "Invalid input Pass the correct data with the correct fields",
       });
     }
     const existingUser = await User.findOne({
@@ -115,7 +116,7 @@ router.put("/update", authMiddleware, async (req, res) => {
 });
 
 router.get("/bulk", async (req, res) => {
-  const filter = req.query.filter || " ";
+  const filter = req.query.filter || "";
   try {
     const users = await User.find({
       $or: [
@@ -123,6 +124,12 @@ router.get("/bulk", async (req, res) => {
         { lastname: { $regex: filter, $options: "i" } },
       ],
     });
+    if (users.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: `No users found matching the filter: ${filter}`,
+      });
+    }
 
     res.status(200).json({
       status: "success",
