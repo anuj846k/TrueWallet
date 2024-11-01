@@ -14,7 +14,7 @@ const userSchema = new mongoose.Schema({
   },
   username: {
     type: String,
-    required: true,
+    required: [true, "please tell us your username"],
     unique: true,
   },
   password: {
@@ -24,6 +24,20 @@ const userSchema = new mongoose.Schema({
   },
 });
 
+
+const accountSchema = new mongoose.Schema({
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Users",
+    required: [true, "please tell us your user id"],
+  },
+  balance: {
+    type: Number,
+    required: [true, "please tell us your balance"],
+  },
+});
+
+const Account = mongoose.model("Accounts", accountSchema);
 const User = mongoose.model("Users", userSchema);
 
-module.exports = User;
+module.exports = { User, Account };
