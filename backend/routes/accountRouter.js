@@ -7,13 +7,13 @@ const zod = require("zod");
 const router = express.Router();
 
 // Define the transfer schema
-const transferSchema = zod.object({
-  amount: zod
-    .number()
-    .positive("Amount must be positive")
-    .transform((val) => Number(val)),
-  to: zod.string().min(1, "Recipient ID is required"),
-});
+// const transferSchema = zod.object({
+//   amount: zod
+//     .number()
+//     .positive("Amount must be positive")
+//     .transform((val) => Number(val)),
+//   to: zod.string().min(1, "Recipient ID is required"),
+// });
 
 router.get("/balance", authMiddleware, async (req, res) => {
   try {
@@ -44,15 +44,7 @@ router.post("/transfer", authMiddleware, async (req, res) => {
   const session = await mongoose.startSession();
   session.startTransaction();
   try {
-    const { success } = transferSchema.safeParse(req.body);
-
-    if (!success) {
-      return res.status(400).json({
-        message: "Amount or Recipient ID is invalid",
-        success: false,
-      });
-    }
-
+    
     const { amount, to } = req.body;
 
     // Fetch the accounts within the transaction

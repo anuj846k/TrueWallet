@@ -5,12 +5,14 @@ import InputBox from "../components/InputBox";
 import Button from "../components/Button";
 import BottomWarning from "../components/BottomWarning";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [firstname, setFirstName] = useState("");
   const [lastname, setLastName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
@@ -25,6 +27,7 @@ const Signup = () => {
     );
     localStorage.setItem("token", response.data.token);
     localStorage.delete("token");
+    navigate("/dashboard");
   };
 
   return (
