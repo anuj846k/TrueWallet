@@ -6,6 +6,7 @@ import Button from "../components/Button";
 import BottomWarning from "../components/BottomWarning";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 const Signup = () => {
   const [firstname, setFirstName] = useState("");
@@ -16,18 +17,26 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Prevent default form submission
-    const response = await axios.post(
-      "http://localhost:5000/api/v1/user/signup",
-      {
-        username: username,
-        firstname: firstname,
-        lastname: lastname,
-        password: password,
-      }
-    );
-    localStorage.setItem("token", response.data.token);
-    localStorage.delete("token");
-    navigate("/dashboard");
+    if (!firstname || !lastname || !username || !password) {
+      toast.error("All fields are required!");
+      return;
+    }
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/v1/user/signup",
+        {
+          username: username,
+          firstname: firstname,
+          lastname: lastname,
+          password: password,
+        }
+      );
+      localStorage.setItem("token", response.data.token);
+      navigate("/dashboard");
+      toast.success("Signed up successfully");
+    } catch (error) {
+      toast.error("Error while signing up");
+    }
   };
 
   return (

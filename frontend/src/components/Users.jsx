@@ -1,69 +1,62 @@
-import { useEffect, useState } from "react";
-import Button from "./Button";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+'use client'
 
-const Users = () => {
-  // Replace with backend call
-  const [users, setUsers] = useState([]);
-  const [filter, setFilter] = useState("");
+import { useEffect, useState } from "react"
+import axios from "axios"
+import { useNavigate } from "react-router-dom"
 
-  console.log(users);
+export default function Users() {
+  const [users, setUsers] = useState([])
+  const [filter, setFilter] = useState("")
+
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/v1/user/bulk?filter=" + filter)
-      .then((response) => setUsers(response.data.users));
-  }, [filter]);
+      .then((response) => setUsers(response.data.users))
+  }, [filter])
 
   return (
-    <>
-      <div className="font-bold mt-6 text-lg">Users</div>
-      <div className="my-2">
+    <div className="max-w-3xl mx-auto px-4 py-8">
+      <h1 className="text-2xl font-bold mb-6">Users</h1>
+      <div className="mb-6">
         <input
-          onChange={(e) => {
-            setFilter(e.target.value);
-          }}
+          onChange={(e) => setFilter(e.target.value)}
           type="text"
           placeholder="Search users..."
-          className="w-full px-2 py-1 border rounded border-slate-200"
-        ></input>
+          className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        />
       </div>
-      <div>
+      <div className="space-y-4">
         {users.map((user) => (
           <User user={user} key={user._id} />
         ))}
       </div>
-    </>
-  );
-};
-export default Users;
+    </div>
+  )
+}
 
 function User({ user }) {
-  const navigate = useNavigate();
+  const navigate = useNavigate()
 
   return (
-    <div className="flex justify-between">
-      <div className="flex">
-        <div className="rounded-full h-12 w-12 bg-slate-200 flex justify-center mt-1 mr-2">
-          <div className="flex flex-col justify-center h-full text-xl">
-            {user.firstname.charAt(0)}
-          </div>
+    <div className="flex items-center justify-between bg-white p-4 rounded-lg shadow-md hover:shadow-lg transition-shadow duration-300">
+      <div className="flex items-center space-x-4">
+        <div className="rounded-full h-12 w-12 bg-blue-100 flex items-center justify-center text-blue-600 font-semibold text-xl">
+          {user.firstname.charAt(0)}
         </div>
-        <div className="flex flex-col justify-center h-ful">
-          <div>
+        <div>
+          <h2 className="text-lg font-semibold text-gray-800">
             {user.firstname} {user.lastname}
-          </div>
+          </h2>
         </div>
       </div>
-
-      <div className="flex flex-col justify-center h-ful">
-        <Button
-          onClick={() => {
-            navigate("/send?id=" + user._id + "&name=" + user.firstname);
-          }}
-          label={"Send Money" }
-        />
-      </div>
+      <button
+        onClick={() => {
+          navigate("/send?id=" + user._id + "&name=" + user.firstname)
+        }}
+        className="px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-colors duration-300"
+      >
+        Send Money
+      </button>
     </div>
-  );
+  )
 }

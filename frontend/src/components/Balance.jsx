@@ -1,4 +1,8 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+
 const Balance = ({ value }) => {
+  
   return (
     <div className="flex">
       <div className="font-bold text-lg ">Your Balance</div>
