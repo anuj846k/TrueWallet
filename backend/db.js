@@ -21,9 +21,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "please tell us your password"],
     minlength: 8,
+    select: false,
   },
 });
-
 
 const accountSchema = new mongoose.Schema({
   userId: {
