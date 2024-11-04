@@ -1,7 +1,7 @@
 const AppError = require("../utils/appError");
 const { User, Account } = require("../db");
 const jwt = require("jsonwebtoken");
-
+const mongoose = require("mongoose");
 const catchAsync = require("../utils/catchAsync");
 const zod = require("zod");
 
@@ -164,5 +164,59 @@ exports.login = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     token,
+  });
+});
+
+exports.balance = catchAsync(async (req, res, next) => {
+  const account = await Account.findOne({ userId: req.userId }).populate(
+    "userId"
+  );
+  if (!account) {
+    return next(new AppError("Account not found", 404));
+  }
+  res.status(200).json({
+    balance: account.balance,
+    user: account.userId,
+  });
+});
+
+exports.transfer = catchAsync(async (req, res, next) => {
+  const session = await mongoose.startSession();
+  session.startTransaction();
+  const { amount, to } = req.body;
+
+  // Fetch the accounts within the transaction
+  const account = await Account.findOne({ userId: req.userId }).session(
+    session
+  );
+  if (!account || account.balance < amount) {
+    await session.abortTransaction();
+    session.endSession();
+    return next(new AppError("Insufficient balance", 400));
+  }
+
+  const toAccount = await Account.findOne({ userId: to }).session(session);
+  if (!toAccount) {
+    await session.abortTransaction();
+    session.endSession();
+    return next(new AppError("Reciever's Account not found", 404));
+  }
+
+  // Perform the transfer
+  await Account.updateOne(
+    { userId: req.userId },
+    { $inc: { balance: -amount } }
+  ).session(session);
+  await Account.updateOne(
+    { userId: to },
+    { $inc: { balance: amount } }
+  ).session(session);
+
+  // Commit the transaction
+  await session.commitTransaction();
+  session.endSession();
+  res.status(200).json({
+    message: "Transfer successful",
+    success: true,
   });
 });
