@@ -5,9 +5,19 @@ const jwt = require("jsonwebtoken");
 const catchAsync = require("../utils/catchAsync");
 const zod = require("zod");
 
+const signToken = (id) => {
+  return jwt.sign({ id: id }, process.env.JWT_SECRET, {
+    expiresIn: "1h",
+  });
+};
+
 const signupSchema = zod.object({
   firstname: zod.string(),
   lastname: zod.string(),
+  username: zod.string().email(),
+  password: zod.string(),
+});
+const loginSchema = zod.object({
   username: zod.string().email(),
   password: zod.string(),
 });
@@ -51,16 +61,14 @@ exports.signup = catchAsync(async (req, res, next) => {
   });
 
   // creating Account
-  const userId = newUser._id;
+  const id = newUser._id;
   const account = await Account.create({
-    userId: userId,
+    userId: id,
     balance: 1000,
   });
 
   // Generating token
-  const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
-    expiresIn: "1h",
-  });
+  const token = signToken(id);
 
   newUser.password = undefined;
 
@@ -120,7 +128,9 @@ exports.bulk = catchAsync(async (req, res, next) => {
     ],
   });
   if (users.length === 0) {
-   return next(new AppError(`No users found matching the filter: ${filter}`, 404));
+    return next(
+      new AppError(`No users found matching the filter: ${filter}`, 404)
+    );
   }
 
   res.status(200).json({
@@ -131,5 +141,28 @@ exports.bulk = catchAsync(async (req, res, next) => {
       lastname: user.lastname,
       _id: user._id,
     })),
+  });
+});
+
+exports.login = catchAsync(async (req, res, next) => {
+  const { success } = loginSchema.safeParse(req.body);
+  if (!success) {
+    return next(new AppError("Pls provide username/email and password", 400));
+  }
+  const user = await User.findOne({ username: req.body.username }).select(
+    "+password"
+  );
+
+  if (
+    !user ||
+    !(await user.correctPassword(req.body.password, user.password))
+  ) {
+    return next(new AppError("Incorrect username/email or password", 401));
+  }
+
+  const token = signToken(user._id);
+  res.status(200).json({
+    status: "success",
+    token,
   });
 });
