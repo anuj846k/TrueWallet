@@ -16,7 +16,7 @@ const authMiddleware = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     // Attach userId to the request object
-    req.userId = decoded.userId;
+    req.userId = decoded.id;
 
     // Call the next middleware or route handler
     next();
