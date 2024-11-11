@@ -1,6 +1,4 @@
 const express = require("express");
-const { User, Account } = require("../db");
-const zod = require("zod");
 const authMiddleware = require("../middleware");
 const authController = require("../controller/authController");
 

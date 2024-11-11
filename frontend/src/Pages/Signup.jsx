@@ -21,6 +21,10 @@ const Signup = () => {
       toast.error("All fields are required!");
       return;
     }
+    if(password.length<8){
+      toast.error("Password should be atleast 8 characters long");
+      return; 
+    }
     try {
       const response = await axios.post(
         "http://localhost:5000/api/v1/user/signup",

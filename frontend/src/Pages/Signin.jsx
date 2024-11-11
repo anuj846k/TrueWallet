@@ -4,15 +4,35 @@ import Button from "../components/Button";
 import Heading from "../components/Heading";
 import InputBox from "../components/InputBox";
 import SubHeading from "../components/SubHeading";
+import axios from "axios";
+import { toast } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 const Signin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     console.log("Email:", username);
-    // Add your signin logic here
+
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/v1/user/login",
+        {
+          username: username,
+          password: password,
+        }
+      );
+      localStorage.setItem("token", response.data.token);
+      toast.success("Signed in successfully");
+      navigate("/dashboard");
+    } catch (err) {
+      console.log(err);
+      toast.error("Email or password is incorrect");
+    }
+
   };
 
   return (

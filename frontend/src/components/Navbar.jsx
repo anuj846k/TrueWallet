@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Wallet, Menu, X } from 'lucide-react';
 
@@ -17,6 +17,9 @@ function MobileNavLink({ to, children }) {
     </Link>
   );
 }
+
+
+
 
 export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -53,7 +56,7 @@ export default function Navbar() {
             <MobileNavLink to="/dashboard">Dashboard</MobileNavLink>
             <MobileNavLink to="/send">Send Money</MobileNavLink>
             <MobileNavLink to="/signin">Sign In</MobileNavLink>
-            <MobileNavLink to="/signup">Sign Up</MobileNavLink>
+            <MobileNavLink to="/signup">Sign Up</MobileNavLink> 
           </div>
         </div>
       )}

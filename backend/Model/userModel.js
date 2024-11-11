@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: [true, "please tell us your password"],
     minlength: 8,
-    // select: false, 
+    // select: false,
   },
 });
 
@@ -39,19 +39,7 @@ userSchema.methods.correctPassword = async function (
 ) {
   return await bcrypt.compare(candidatePassword, userPassword);
 };
-const accountSchema = new mongoose.Schema({
-  userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Users",
-    required: [true, "please tell us your user id"],
-  },
-  balance: {
-    type: Number,
-    required: [true, "please tell us your balance"],
-  },
-});
 
-const Account = mongoose.model("Accounts", accountSchema);
 const User = mongoose.model("Users", userSchema);
 
-module.exports = { User, Account };
+module.exports = { User };

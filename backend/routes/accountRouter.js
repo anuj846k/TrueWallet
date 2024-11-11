@@ -21,5 +21,6 @@ router.post(
   authController.transfer
 );
 router.get("/balance", authMiddleware, authController.balance);
+router.get("/recent", authMiddleware, authController.recent);
 
 module.exports = router;
