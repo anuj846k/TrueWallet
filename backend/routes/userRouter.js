@@ -11,4 +11,5 @@ router.post("/login", authController.login);
 router.put("/update", authMiddleware, authController.update);
 
 router.get("/bulk", authController.bulk);
+router.get("/profile", authMiddleware, authController.profile);
 module.exports = router;

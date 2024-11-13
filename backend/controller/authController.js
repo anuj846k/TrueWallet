@@ -182,7 +182,6 @@ exports.balance = catchAsync(async (req, res, next) => {
   });
 });
 
-
 exports.transfer = catchAsync(async (req, res, next) => {
   try {
     const session = await mongoose.startSession();
@@ -255,25 +254,26 @@ exports.recent = catchAsync(async (req, res, next) => {
     })
       .limit(10)
       .populate({
-        path: 'fromId',
+        path: "fromId",
         populate: {
-          path: 'userId',
-          model: 'Users',
-          select: 'firstname lastname'
-        }
+          path: "userId",
+          model: "Users",
+          select: "firstname lastname",
+        },
       })
       .populate({
-        path: 'toId',
+        path: "toId",
         populate: {
-          path: 'userId',
-          model: 'Users',
-          select: 'firstname lastname'
-        }
+          path: "userId",
+          model: "Users",
+          select: "firstname lastname",
+        },
       })
       .sort({ createdAt: -1 });
 
     const formattedTransactions = recentTransactions.map((transaction) => {
-      const isCredit = transaction.toId._id.toString() === account._id.toString();
+      const isCredit =
+        transaction.toId._id.toString() === account._id.toString();
 
       return {
         id: transaction._id,
@@ -297,4 +297,16 @@ exports.recent = catchAsync(async (req, res, next) => {
       message: "Error fetching recent transactions",
     });
   }
+});
+
+exports.profile = catchAsync(async (req, res, next) => {
+  const user = await User.findById(req.userId);
+  if(!user){
+    return next(new AppError("User not found", 404));
+  }
+  res.status(200).json({
+    message:'success',
+    data:user
+    
+  })
 });
