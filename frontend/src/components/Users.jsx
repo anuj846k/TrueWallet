@@ -16,7 +16,7 @@ export default function Users() {
 
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-6">Users</h1>
+      <h1 className="text-2xl font-bold mb-6">Recent Contacts</h1>
       <div className="mb-6">
         <input
           onChange={(e) => setFilter(e.target.value)}

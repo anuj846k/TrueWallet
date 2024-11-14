@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import Balance from "@/components/Balance";
 import Users from "@/components/Users";
+import { FcMoneyTransfer } from "react-icons/fc";
 
 export default function Dashboard() {
   const [balance, setBalance] = useState(null);
@@ -25,7 +26,7 @@ export default function Dashboard() {
           axios.get("http://localhost:5000/api/v1/account/balance", {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },  
+            },
           }),
           axios.get("http://localhost:5000/api/v1/account/recent", {
             headers: {
@@ -34,12 +35,12 @@ export default function Dashboard() {
           }),
         ]);
 
-        console.log("Balance Response:", balanceResponse.data);
-        console.log("Transactions Response:", transactionsResponse.data);
+        // console.log("Balance Response:", balanceResponse.data);
+        // console.log("Transactions Response:", transactionsResponse.data);
 
         setBalance(balanceResponse.data.balance);
         setTransactions(transactionsResponse.data.transactions);
-        console.log(transactions);
+        // console.log(transactions);
       } catch (err) {
         if (err.response?.status === 401) {
           toast.error("Session Expired! Please sign in to continue");
@@ -124,7 +125,9 @@ export default function Dashboard() {
         <div>
           <Card>
             <CardHeader>
-              <CardTitle>Recent Contacts</CardTitle>
+              <h1 className="text-6xl font-mono font-bold flex items-center">
+                SEND-<span className="text-blue-600 mr-10"> MONEY</span> <FcMoneyTransfer/>
+              </h1>
             </CardHeader>
             <CardContent>
               <Users />

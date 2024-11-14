@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
+import { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Wallet, Menu, X, User, ChevronDown, LogOut } from "lucide-react";
-import axios from "axios";
+import AuthContext from "../context/AuthContext";
 import { Button } from "./ui/button";
 import {
   DropdownMenu,
@@ -34,31 +34,10 @@ function MobileNavLink({ to, children }) {
 }
 
 export default function Navbar() {
-  const [userData, setUserData] = useState([]);
+  const { user, logout } = useContext(AuthContext);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const navigate = useNavigate();
 
-  useEffect(() => {
-    async function getUser() {
-      try {
-        const token = localStorage.getItem("token");
-        if (!token) return;
-        const response = await axios.get(
-          "http://localhost:5000/api/v1/user/profile",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        setUserData(response.data.data);
-        console.log(userData);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-    getUser();
-  }, []);
+  const navigate = useNavigate();
 
   return (
     <nav className="bg-white shadow-md">
@@ -73,7 +52,8 @@ export default function Navbar() {
             </Link>
           </div>
           <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
-            {userData ? (
+            <NavLink to="/">Home</NavLink>
+            {user ? (
               <>
                 <NavLink to="/dashboard">Dashboard</NavLink>
                 <NavLink to="/send">Send Money</NavLink>
@@ -85,14 +65,12 @@ export default function Navbar() {
                     >
                       <User className="h-5 w-5 text-blue-600" />
                       <span className="text-sm font-medium">
-                        Hello, {userData.firstname}!
+                        Hello, {user.firstname}!
                       </span>
                       <ChevronDown className="h-4 w-4 text-gray-500" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent
-                    className="w-56 mt-2 p-2 bg-white rounded-lg shadow-lg border border-gray-200"
-                  >
+                  <DropdownMenuContent className="w-56 mt-2 p-2 bg-white rounded-lg shadow-lg border border-gray-200">
                     <DropdownMenuLabel className="px-2 py-1.5 text-sm font-semibold text-gray-500">
                       My Account
                     </DropdownMenuLabel>
@@ -108,7 +86,7 @@ export default function Navbar() {
                     <DropdownMenuItem asChild>
                       <button
                         onClick={() => {
-                          localStorage.removeItem("token");
+                          logout();
                           navigate("/signin");
                         }}
                         className="flex items-center space-x-2 w-full px-2 py-2 text-sm text-gray-700 hover:bg-red-50 hover:text-red-600 rounded-md cursor-pointer"
@@ -146,8 +124,27 @@ export default function Navbar() {
           <div className="pt-2 pb-3 space-y-1">
             <MobileNavLink to="/dashboard">Dashboard</MobileNavLink>
             <MobileNavLink to="/send">Send Money</MobileNavLink>
-            <MobileNavLink to="/signin">Sign In</MobileNavLink>
-            <MobileNavLink to="/signup">Sign Up</MobileNavLink>
+            {user ? (
+              <>
+                <span className="block pl-3 pr-4 py-2 text-base font-medium text-blue-600">
+                  Hello, {user.firstname}
+                </span>
+                <button
+                  onClick={() => {
+                    logout();
+                    navigate("/signin");
+                  }}
+                  className="block w-full text-left pl-3 pr-4 py-2 text-base font-medium text-blue-600 hover:bg-blue-50 hover:border-blue-300 hover:text-blue-800"
+                >
+                  Logout
+                </button>
+              </>
+            ) : (
+              <>
+                <MobileNavLink to="/signin">Sign In</MobileNavLink>
+                <MobileNavLink to="/signup">Sign Up</MobileNavLink>
+              </>
+            )}
           </div>
         </div>
       )}

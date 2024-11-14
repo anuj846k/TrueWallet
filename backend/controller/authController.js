@@ -166,6 +166,7 @@ exports.login = catchAsync(async (req, res, next) => {
   res.status(200).json({
     status: "success",
     token,
+    user:{firstname:user.firstname,lastname:user.lastname,username:user.username}
   });
 });
 
@@ -301,12 +302,11 @@ exports.recent = catchAsync(async (req, res, next) => {
 
 exports.profile = catchAsync(async (req, res, next) => {
   const user = await User.findById(req.userId);
-  if(!user){
+  if (!user) {
     return next(new AppError("User not found", 404));
   }
   res.status(200).json({
-    message:'success',
-    data:user
-    
-  })
+    message: "success",
+    data: user,
+  });
 });

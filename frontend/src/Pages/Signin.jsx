@@ -7,11 +7,13 @@ import SubHeading from "../components/SubHeading";
 import axios from "axios";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/context/AuthContext";
 
 const Signin = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { login } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -25,14 +27,17 @@ const Signin = () => {
           password: password,
         }
       );
-      localStorage.setItem("token", response.data.token);
+      const userData = {
+        firstname: response.data.user.firstname,
+        token: response.data.token,
+      };
+      login(userData);
       toast.success("Signed in successfully");
       navigate("/dashboard");
     } catch (err) {
       console.log(err);
       toast.error("Email or password is incorrect");
     }
-
   };
 
   return (
