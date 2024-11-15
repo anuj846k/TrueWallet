@@ -10,7 +10,7 @@ export default function Users() {
 
   useEffect(() => {
     axios
-      .get("https://truewallet.onrender.com//api/v1/user/bulk?filter=" + filter)
+      .get("https://truewallet.onrender.com/api/v1/user/bulk?filter=" + filter)
       .then((response) => setUsers(response.data.users))
   }, [filter])
 
