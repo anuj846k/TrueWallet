@@ -56,7 +56,7 @@ export default function Navbar() {
             {user ? (
               <>
                 <NavLink to="/dashboard">Dashboard</NavLink>
-                <NavLink to="/send">Send Money</NavLink>
+                <NavLink to="/analytics">Analytics</NavLink>
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button
@@ -123,7 +123,7 @@ export default function Navbar() {
         <div className="sm:hidden">
           <div className="pt-2 pb-3 space-y-1">
             <MobileNavLink to="/dashboard">Dashboard</MobileNavLink>
-            <MobileNavLink to="/send">Send Money</MobileNavLink>
+            <MobileNavLink to="/analytics">Analytics</MobileNavLink>
             {user ? (
               <>
                 <span className="block pl-3 pr-4 py-2 text-base font-medium text-blue-600">

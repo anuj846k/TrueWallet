@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import Signup from "./Pages/Signup";
 import Signin from "./Pages/Signin";
 import Dashboard from "./Pages/Dashboard";
-import SendMoney from "./Pages/SendMoney";
+import Analytics from "./Pages/Analytics";
 import HomePage from "./Pages/Home";
 import { AuthProvider } from "./context/AuthContext";
 import Profile from "./Pages/Profile";
@@ -22,7 +22,7 @@ function App() {
               <Route path="/signup" element={<Signup />} />
               <Route path="/signin" element={<Signin />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/send" element={<SendMoney />} />
+              <Route path="/analytics" element={<Analytics />} />
             </Routes>
           </div>
         </div>
