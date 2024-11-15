@@ -11,7 +11,7 @@ const SendMoney = () => {
   const handleInitiateTransfer = async () => {
     try {
       await axios.post(
-        "https://truewallet.onrender.com/account/transfer",
+        "https://truewallet.onrender.com/api/v1/account/transfer",
         {
           to: id,
           amount,
