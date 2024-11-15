@@ -23,12 +23,12 @@ export default function Dashboard() {
     const fetchDashboardData = async () => {
       try {
         const [balanceResponse, transactionsResponse] = await Promise.all([
-          axios.get("http://localhost:5000/api/v1/account/balance", {
+          axios.get("https://truewallet.onrender.com/api/v1/account/balance", {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
           }),
-          axios.get("http://localhost:5000/api/v1/account/recent", {
+          axios.get("https://truewallet.onrender.com/api/v1/account/recent", {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
             },

@@ -27,7 +27,7 @@ const Signup = () => {
     }
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/v1/user/signup",
+        "https://truewallet.onrender.com/api/v1/user/signup",
         {
           username: username,
           firstname: firstname,
