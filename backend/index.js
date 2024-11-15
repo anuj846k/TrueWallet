@@ -13,10 +13,14 @@ const DB = process.env.MONGO_URI;
 
 const app = express();
 app.use(express.json());
-app.use(cors({
-  origin: 'https://true-wallet-zeta.vercel.app/',
-  credentials: true
-}));
+app.use(
+  cors({
+    origin: "https://true-wallet-zeta.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
+  })
+);
 app.use(helmet());
 
 // Root route
