@@ -13,16 +13,25 @@ const DB = process.env.MONGO_URI;
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: 'https://true-wallet-zeta.vercel.app/',
+  credentials: true
+}));
 app.use(helmet());
 
+// Root route
+app.get("/", (req, res) => {
+  res.status(200).json({
+    status: "success",
+    message: "Welcome to the Truewallet API!",
+  });
+});
 
-//Routes
+// Routes
 app.use("/api/v1/user", userRouter);
 app.use("/api/v1/account", accountRouter);
 
-
-//Handle Undefined routes
+// Handle undefined routes
 app.all("*", (req, res, next) => {
   next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
 });
@@ -30,7 +39,7 @@ app.all("*", (req, res, next) => {
 // Global Error handler
 app.use(globalErrorHandler);
 
-//Database connection
+// Database connection
 mongoose
   .connect(DB, {})
   .then(() => {
