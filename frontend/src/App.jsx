@@ -7,6 +7,7 @@ import Analytics from "./Pages/Analytics";
 import HomePage from "./Pages/Home";
 import { AuthProvider } from "./context/AuthContext";
 import Profile from "./Pages/Profile";
+import SendMoney from "./Pages/SendMoney";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
               <Route path="/signin" element={<Signin />} />
               <Route path="/dashboard" element={<Dashboard />} />
               <Route path="/analytics" element={<Analytics />} />
+              <Route path="/send" element={<SendMoney />} />
             </Routes>
           </div>
         </div>
