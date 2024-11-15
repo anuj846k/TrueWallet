@@ -27,6 +27,7 @@ const Signin = () => {
           password: password,
         }
       );
+      localStorage.setItem("token", response.data.token);
       const userData = {
         firstname: response.data.user.firstname,
         token: response.data.token,

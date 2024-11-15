@@ -13,7 +13,7 @@ export const AuthProvider = ({ children }) => {
         const token = localStorage.getItem("token");
         if (!token) return;
         const response = await axios.get(
-          "http://localhost:5000/api/v1/user/profile",
+          "https://truewallet.onrender.com/api/v1/user/profile",
           {
             headers: {
               Authorization: `Bearer ${token}`,
